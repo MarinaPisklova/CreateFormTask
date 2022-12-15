@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import AppRouter from './components/AppRouter/AppRouter';
 import Header from './components/Header/Header';
-import store from './store/store';
 
 const Global = createGlobalStyle`
   *{
@@ -32,12 +31,10 @@ export function App() {
   return (
     <>
       <Global />
-      <Provider store={store}>
-        <Header/>
-        <BrowserRouter>
-          <AppRouter />
-        </BrowserRouter>
-      </Provider>
+      <Header />
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
     </>
   )
 }

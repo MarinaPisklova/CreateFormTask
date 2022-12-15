@@ -1,5 +1,6 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 
 const NODE_ENV = process.env.NODE_ENV;
 const IS_DEV = NODE_ENV === 'development';
@@ -75,10 +76,17 @@ module.exports = {
         },
         ]
     },
-    plugins: [new HTMLWebpackPlugin({ 
-        template: path.resolve(__dirname, 'index.html'),
-        favicon: path.resolve(__dirname, 'src/static/favicon.png'),
-    })],
+    plugins: [
+        new HTMLWebpackPlugin({
+            template: path.resolve(__dirname, 'index.html'),
+            favicon: path.resolve(__dirname, 'src/static/favicon.png')
+        }),
+        new CopyPlugin({
+            patterns: [
+                { from: "public/images", to: path.resolve(__dirname, 'dist/images') },
+            ],
+        }),
+    ],
     devServer: {
         historyApiFallback: true,
         port: 3000,

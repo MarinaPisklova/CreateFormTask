@@ -7,13 +7,14 @@ interface IOrderItem {
   material: string,
   quantity: number,
   cost: number,
+  img: string
 }
 
 function OrderItem(props: IOrderItem) {
   return (
     <li>
       <ItemCard>
-        <Img />
+        <Img src={props.img} />
         <ItemInfo>
           <ItemName>{props.name}</ItemName>
           <ItemText>{props.material}</ItemText>
@@ -38,7 +39,9 @@ const Img = styled.img`
   width: 45px;
   height: 45px;
   margin-right: 10px;
-  background-color: teal;
+  background-color: #F3F3F3;
+  border: 1px solid #E3E3E3;
+  border-radius: 1px;
 `
 
 const ItemCard = styled.div`

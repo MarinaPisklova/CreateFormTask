@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import AppRouter from './components/AppRouter/AppRouter';
 import Header from './components/Header/Header';
+import shippingForm from './store/formStore';
 
 const Global = createGlobalStyle`
   *{
@@ -28,6 +29,23 @@ const Global = createGlobalStyle`
 `
 
 export function App() {
+  React.useEffect(() => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      var ip = ''; // Leave blank to lookup current IP address
+      var XMLHttp = new XMLHttpRequest();
+      XMLHttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          var ipwhois = JSON.parse(this.responseText);
+          shippingForm.onAddressFieldChange("shipping", "country", ipwhois.country);
+          shippingForm.onAddressFieldChange("shipping", "city", ipwhois.city);
+        }
+      };
+      XMLHttp.open('GET', 'https://ipwho.is/' + ip, true);
+      XMLHttp.send();
+    });
+  }, []);
+
+
   return (
     <>
       <Global />

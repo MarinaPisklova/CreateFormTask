@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import styled from 'styled-components';
-import store from '../../store/store';
+import store from '../../store/OrderItemsStore';
 
 const Header = observer(() => {
   return (

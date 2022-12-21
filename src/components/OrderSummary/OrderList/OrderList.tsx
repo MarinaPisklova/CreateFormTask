@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import OrderItem from './../OrderItem/OrderItem';
-import store from "../../../store/store";
 import { observer } from 'mobx-react-lite';
+import OrderItemsStore from "../../../store/OrderItemsStore";
 
 const List = styled.ul`
   list-style: none;
@@ -12,7 +12,7 @@ const OrderList = observer(() => {
   return (
     <List>
       {
-        store.orderItems.map(item => 
+        OrderItemsStore.orderItems.map(item => 
           <OrderItem key={item.id} {...item}/>
         )
       }

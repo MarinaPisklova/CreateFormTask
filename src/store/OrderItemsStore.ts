@@ -1,7 +1,16 @@
 import { makeAutoObservable } from "mobx";
 
-class Store {
-  orderItems = [
+interface IOrderItem {
+  id: number,
+  name: string,
+  material: string,
+  quantity: number,
+  cost: number,
+  img: string
+}
+
+class OrderItemsStore {
+  orderItems: IOrderItem[] = [
     {
       id: 0,
       name: "The Chelsea Boot",
@@ -28,21 +37,9 @@ class Store {
     }
   ];
 
-  count = 0;
-
   constructor() {
     makeAutoObservable(this);
   }
-
-  increment() {
-    this.count = this.count + 1;
-    console.log(this.count)
-  }
-
-  add(){
-    this.orderItems.push(this.orderItems[0]);
-  }
-
 }
 
-export default new Store();
+export default new OrderItemsStore();

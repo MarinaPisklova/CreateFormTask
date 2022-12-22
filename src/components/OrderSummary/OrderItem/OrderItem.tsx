@@ -1,5 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { observer } from 'mobx-react-lite';
+import OrderItemsStore from "../../../store/OrderItemsStore";
+import Dustbin from "../../UI/Icons/Dustbin/Dustbin";
 
 interface IOrderItem {
   id: number;
@@ -10,7 +13,9 @@ interface IOrderItem {
   img: string
 }
 
-function OrderItem(props: IOrderItem) {
+const OrderItem = observer((props: IOrderItem) => {
+  let editMode = OrderItemsStore.editMode;
+
   return (
     <li>
       <ItemCard>
@@ -20,16 +25,41 @@ function OrderItem(props: IOrderItem) {
           <ItemText>{props.material}</ItemText>
           <ItemText>Quantity: {props.quantity}</ItemText>
         </ItemInfo>
-        <ItemCost>${props.cost}</ItemCost>
+        <ItemCostBox>
+          <ItemCost>${props.cost}</ItemCost>
+          {
+            editMode &&
+            <StyledDustbinBox onClick={() => OrderItemsStore.deleteItem(props.id)} >
+              <Dustbin/>
+            </StyledDustbinBox>
+          }
+        </ItemCostBox>
       </ItemCard>
       <Line></Line>
     </li>
   )
-}
+})
 
 export default OrderItem;
 
-const Line = styled.div`
+const StyledDustbinBox = styled.div`
+  cursor: pointer;
+  &:hover path{
+    fill: #bb0cb2;
+  }
+
+`
+
+
+const ItemCostBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-left: auto;
+`
+
+export const Line = styled.div`
   height: 1px;
   width: 100%;
   margin-bottom: 11px;
@@ -70,7 +100,7 @@ const ItemText = styled.p`
 `
 
 const ItemCost = styled.p`
-  margin-left: auto;
+
   font-size: 12px;
   line-height: 11px;
   text-align: right;

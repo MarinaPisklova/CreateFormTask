@@ -3,6 +3,7 @@ import Form from "../Form/Form";
 import styled from 'styled-components';
 import appStore from "../../store/appStore";
 import { observer } from 'mobx-react-lite';
+import formStore from "../../store/formStore";
 
 const Container = styled.div`
   width: 400px;
@@ -25,8 +26,8 @@ const FormSteps = styled.div`
   line-height: 14px;
 `
 const Title = styled.h2`
-  margin-bottom: 19px;
-  font-size: 26px;
+  
+  font-size: 24px;
   line-height: 31px;
   color: #5A1094;
 `
@@ -83,12 +84,26 @@ function ShippingForm() {
 function BillingForm() {
   return (
     <>
-      <>
+      <Flex>
         <Title>Billing Information</Title>
-        <button>Same as shipping</button>
-      </>
+        <CopyButton onClick={()=>formStore.copyShippingData()}>Same as shipping</CopyButton>
+      </Flex>
       <Form formName="billing" />
     </>
   )
 }
 
+const Flex = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 19px;
+`
+
+const CopyButton = styled.button`
+  text-decoration: underline;
+  font-size: 12px;
+  line-height: 14px;
+  color: #5A1094;
+  cursor: pointer;
+`

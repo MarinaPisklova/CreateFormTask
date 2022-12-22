@@ -36,9 +36,19 @@ class OrderItemsStore {
       img: "./images/img3.png",
     }
   ];
+  taxes: number = 12.12;
+  editMode: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  toggleEditMode(){
+    this.editMode = !this.editMode;
+  }
+
+  deleteItem(id:number){
+    this.orderItems = this.orderItems.filter(item => item.id != id);
   }
 }
 

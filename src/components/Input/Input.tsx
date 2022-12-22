@@ -5,7 +5,7 @@ import { IInput } from "../../store/formStore";
 
 interface IInputProps {
   formName: string;
-  field: IInput,
+  field: IInput | undefined,
   onChange: (formName: string, name: string, value: string) => void,
 }
 
@@ -17,6 +17,9 @@ const Input = observer((props: IInputProps) => {
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     props.onChange(props.formName, e.target.name, e.target.value)
   }
+
+  if (props.field == undefined)
+    return null
 
   return (
     <InputBox>
@@ -53,6 +56,7 @@ const StyledInput = styled.input<Props>`
 `
 
 const InputBox = styled.div`
+  width: 100%;
   position: relative;
 `
 const StyledErrorBox = styled.div`

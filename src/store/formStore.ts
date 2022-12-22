@@ -26,7 +26,8 @@ interface IOption {
 
 interface IRecipientFields {
   fullName: IInput;
-  phone: IInput;
+  phone?: IInput | undefined;
+  email?: IInput | undefined;
 }
 
 interface IRecipient {
@@ -154,13 +155,13 @@ class FormStore {
             error: '',
             rule: 'required|string'
           },
-          phone: {
-            name: "phone",
-            placeholder: "Daytime Phone",
-            type: "tel",
+          email: {
+            name: "email",
+            placeholder: "Email Address",
+            type: "text",
             value: '',
             error: '',
-            rule: ['required', `regex:${phoneRegex}`]
+            rule: 'required'
           }
         }
       },
@@ -221,21 +222,26 @@ class FormStore {
     }
   }
 
+  isValidForm: boolean | void = true;
+
   constructor() {
     makeAutoObservable(this);
   }
 
   onRecipientFieldChange = (formName: string, propName: string, value: string) => {
-    this.form[formName as keyof IForm].recipient.fields[propName as keyof IRecipientFields].value = value;
-    let field = this.form[formName as keyof IForm].recipient.fields[propName as keyof IRecipientFields];
+    let field: IInput | undefined = this.form[formName as keyof IForm].recipient.fields[propName as keyof IRecipientFields];
 
-    var validation = new Validator(
-      { [propName]: field.value },
-      { [propName]: field.rule },
-      { required: `Please enter ${field.name}` }
-    )
-    this.form[formName as keyof IForm].meta.isValid = validation.passes();
-    this.form[formName as keyof IForm].recipient.fields[propName as keyof IRecipientFields].error = validation.errors.first(propName)
+    if (field != undefined) {
+      field.value = value;
+
+      var validation = new Validator(
+        { [propName]: field.value },
+        { [propName]: field.rule },
+        { required: `Please enter ${field.name}` }
+      )
+      this.form[formName as keyof IForm].meta.isValid = validation.passes();
+      field.error = validation.errors.first(propName)
+    }
   };
 
   onAddressFieldChange = (formName: string, propName: string, value: string | undefined) => {
@@ -254,19 +260,70 @@ class FormStore {
   submitFields = (formName: string) => {
     let recFields = this.form[formName as keyof IForm].recipient.fields;
     let addFields = this.form[formName as keyof IForm].address.fields;
-    console.log("valid = ",this.form.shipping.meta.isValid)
+    let isValidForm: boolean | void = true;
 
     for (const ind in recFields) {
       const field = recFields[ind as keyof IRecipientFields];
-      
-      var validation = new Validator(
+
+      if(field != undefined){
+        let validation = new Validator(
+          { [field.name]: field.value },
+          { [field.name]: field.rule },
+          { required: `Please enter ${field.name}` }
+        )
+        isValidForm = isValidForm && validation.passes();
+        this.form[formName as keyof IForm].meta.isValid = validation.passes();
+        field.error = validation.errors.first(field.name)
+      }
+
+    }
+
+    for (const ind in addFields) {
+      const field = addFields[ind as keyof IAddressFields];
+
+      let validation = new Validator(
         { [field.name]: field.value },
         { [field.name]: field.rule },
         { required: `Please enter ${field.name}` }
       )
+      isValidForm = isValidForm && validation.passes();
       this.form[formName as keyof IForm].meta.isValid = validation.passes();
-      console.log(this.form[formName as keyof IForm].meta.isValid)
-      this.form[formName as keyof IForm].recipient.fields[ind as keyof IRecipientFields].error = validation.errors.first(field.name)
+      this.form[formName as keyof IForm].address.fields[ind as keyof IAddressFields].error = validation.errors.first(field.name)
+    }
+    this.isValidForm = isValidForm;
+  };
+
+  copyShippingData() {
+    let shipRecFields = this.form.shipping.recipient.fields;
+    let billRecFields = this.form.billing.recipient.fields;
+
+    for (const ind in billRecFields) {
+      const field = billRecFields[ind as keyof IRecipientFields];
+      if(field != undefined){
+        const name = field.name;
+
+        if (name in shipRecFields) {
+          let field2 = shipRecFields[name as keyof IRecipientFields];
+          if(field2 != undefined){
+            field.value = field2.value;
+          }
+
+
+          
+        }
+      }
+    }
+
+    let shipAdrFields = this.form.shipping.address.fields;
+    let billAdrFields = this.form.billing.address.fields;
+
+    for (const ind in billAdrFields) {
+      const field = billAdrFields[ind as keyof IAddressFields];
+      const name = field.name;
+
+      if (name in shipAdrFields) {
+        field.value = shipAdrFields[name as keyof IAddressFields].value;
+      }
     }
 
 
@@ -275,7 +332,7 @@ class FormStore {
 
 
 
-  };
+  }
 
 
 }

@@ -5,20 +5,23 @@ import Select, { SingleValue } from 'react-select'
 import Input from "../Input/Input";
 import formStore, { IForm } from "../../store/formStore";
 import appStore from "../../store/appStore";
+import OrderItemsStore from "../../store/OrderItemsStore";
 
-interface IFormProps{
+interface IFormProps {
   formName: string;
 }
 
 const Form: FC<IFormProps> = observer((props) => {
   const recipient = formStore.form[props.formName as keyof IForm].recipient.fields;
   const address = formStore.form[props.formName as keyof IForm].address.fields;
+  const editMode = OrderItemsStore.editMode;
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     formStore.submitFields(props.formName);
-    //appStore.submit(props.formName);
-    console.log("submit");
+    if (formStore.isValidForm) {
+      appStore.submit(props.formName);
+    }
   }
 
   function handleChange(newValue: SingleValue<MyOption>) {
@@ -34,11 +37,29 @@ const Form: FC<IFormProps> = observer((props) => {
           onChange={formStore.onRecipientFieldChange}
           formName={props.formName}
         />
-        <Input
-          field={recipient.phone}
-          onChange={formStore.onRecipientFieldChange}
-          formName={props.formName}
-        />
+        <DeliveryBox>
+          {
+            props.formName == "shipping" &&
+            <>
+              <Input
+                field={recipient.phone}
+                onChange={formStore.onRecipientFieldChange}
+                formName={props.formName}
+              />
+              <Note>For delivery questions only</Note>
+            </>
+          }
+          {
+            props.formName == "billing" &&
+            <Input
+              field={recipient.email}
+              onChange={formStore.onRecipientFieldChange}
+              formName={props.formName}
+            />
+          }
+
+        </DeliveryBox>
+
       </StyledFieldset>
 
       <StyledFieldset>
@@ -65,7 +86,7 @@ const Form: FC<IFormProps> = observer((props) => {
             options={address.country.country}
             placeholder={address.country.placeholder}
             onChange={(newValue: SingleValue<MyOption>) => handleChange(newValue)}
-            value={{value: address.country.value, label: address.country.value}}
+            value={{ value: address.country.value, label: address.country.value }}
           />
 
           <Input
@@ -78,7 +99,7 @@ const Form: FC<IFormProps> = observer((props) => {
 
       <StyledButton
         type="submit"
-        disabled={!formStore.form.shipping.meta.isValid}
+        disabled={!formStore.form.shipping.meta.isValid || editMode}
       >
         Continue
       </StyledButton>
@@ -96,6 +117,17 @@ function MySelect(props: any) {
 }
 
 type MyOption = { label: string, value: string };
+
+const DeliveryBox = styled.div`
+  display: flex;
+  align-items: center;
+`
+const Note = styled.div`
+  margin-left: 10px;
+  font-size: 13px;
+  line-height: 12px;
+  color: #777879;
+`
 
 const StyledSelect = styled(MySelect)`
   & .Select__control {

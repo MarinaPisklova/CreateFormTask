@@ -39,6 +39,7 @@ export function App() {
           var ipwhois = JSON.parse(this.responseText);
           shippingForm.onAddressFieldChange("shipping", "country", ipwhois.country);
           shippingForm.onAddressFieldChange("shipping", "city", ipwhois.city);
+          shippingForm.onAddressFieldChange("shipping", "zip", ipwhois.postal);
         }
       };
       XMLHttp.open('GET', 'https://ipwho.is/' + ip, true);

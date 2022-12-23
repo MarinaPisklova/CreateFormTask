@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import styled from 'styled-components';
 import Select, { SingleValue } from 'react-select'
 import Input from "../Input/Input";
-import formStore, { IForm } from "../../store/formStore";
+import formStore, { IForms } from "../../store/formStore";
 import appStore from "../../store/appStore";
 import OrderItemsStore from "../../store/OrderItemsStore";
 
@@ -12,8 +12,8 @@ interface IFormProps {
 }
 
 const Form: FC<IFormProps> = observer((props) => {
-  const recipient = formStore.form[props.formName as keyof IForm].recipient.fields;
-  const address = formStore.form[props.formName as keyof IForm].address.fields;
+  const recipient = formStore.form[props.formName as keyof IForms].recipient;
+  const address = formStore.form[props.formName as keyof IForms].address;
   const editMode = OrderItemsStore.editMode;
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -29,81 +29,88 @@ const Form: FC<IFormProps> = observer((props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <StyledFieldset>
-        <Legend>{formStore.form[props.formName as keyof IForm].recipient.title}</Legend>
-        <Input
-          field={recipient.fullName}
-          onChange={formStore.onRecipientFieldChange}
-          formName={props.formName}
-        />
-        <DeliveryBox>
-          {
-            props.formName == "shipping" &&
-            <>
-              <Input
-                field={recipient.phone}
-                onChange={formStore.onRecipientFieldChange}
-                formName={props.formName}
-              />
-              <Note>For delivery questions only</Note>
-            </>
-          }
-          {
-            props.formName == "billing" &&
+    <>
+      {
+        recipient && address &&
+        <form onSubmit={handleSubmit}>
+          <StyledFieldset>
+            <Legend>{recipient.title}</Legend>
             <Input
-              field={recipient.email}
+              field={recipient.fields.fullName}
               onChange={formStore.onRecipientFieldChange}
               formName={props.formName}
             />
-          }
+            <DeliveryBox>
+              {
+                props.formName == "shipping" &&
+                <>
+                  <Input
+                    field={recipient.fields.phone}
+                    onChange={formStore.onRecipientFieldChange}
+                    formName={props.formName}
+                  />
+                  <Note>For delivery questions only</Note>
+                </>
+              }
+              {
+                props.formName == "billing" &&
+                <Input
+                  field={recipient.fields.email}
+                  onChange={formStore.onRecipientFieldChange}
+                  formName={props.formName}
+                />
+              }
 
-        </DeliveryBox>
+            </DeliveryBox>
 
-      </StyledFieldset>
+          </StyledFieldset>
 
-      <StyledFieldset>
-        <Legend>{formStore.form[props.formName as keyof IForm].address.title}</Legend>
-        <Input
-          field={address.streetAddress}
-          onChange={formStore.onAddressFieldChange}
-          formName={props.formName}
-        />
-        <Input
-          field={address.apartaments}
-          onChange={formStore.onAddressFieldChange}
-          formName={props.formName}
-        />
-        <Input
-          field={address.city}
-          onChange={formStore.onAddressFieldChange}
-          formName={props.formName}
-        />
+          <StyledFieldset>
+            <Legend>{address.title}</Legend>
+            <Input
+              field={address.fields.streetAddress}
+              onChange={formStore.onAddressFieldChange}
+              formName={props.formName}
+            />
+            <Input
+              field={address.fields.apartaments}
+              onChange={formStore.onAddressFieldChange}
+              formName={props.formName}
+            />
+            <Input
+              field={address.fields.city}
+              onChange={formStore.onAddressFieldChange}
+              formName={props.formName}
+            />
 
-        <FlexBox>
-          <StyledSelect
-            classNamePrefix={'Select'}
-            options={address.country.country}
-            placeholder={address.country.placeholder}
-            onChange={(newValue: SingleValue<MyOption>) => handleChange(newValue)}
-            value={{ value: address.country.value, label: address.country.value }}
-          />
+            <FlexBox>
+              <StyledSelect
+                classNamePrefix={'Select'}
+                options={address.fields.country.country}
+                placeholder={address.fields.country.placeholder}
+                onChange={(newValue: SingleValue<MyOption>) => handleChange(newValue)}
+                value={{ value: address.fields.country.value, label: address.fields.country.value }}
+              />
 
-          <Input
-            field={address.zip}
-            onChange={formStore.onAddressFieldChange}
-            formName={props.formName}
-          />
-        </FlexBox>
-      </StyledFieldset>
+              <Input
+                field={address.fields.zip}
+                onChange={formStore.onAddressFieldChange}
+                formName={props.formName}
+              />
+            </FlexBox>
+          </StyledFieldset>
 
-      <StyledButton
-        type="submit"
-        disabled={!formStore.form.shipping.meta.isValid || editMode}
-      >
-        Continue
-      </StyledButton>
-    </form>
+          <StyledButton
+            type="submit"
+            disabled={!formStore.form.shipping.meta.isValid || editMode}
+          >
+            Continue
+          </StyledButton>
+        </form>
+      }
+    </>
+
+
   );
 })
 export default Form;

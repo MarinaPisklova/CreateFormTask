@@ -18,7 +18,7 @@ interface IState {
 class AppStore {
   state: IState = {
     shipping: {
-      active: true,
+      active: false,
       next: "billing"
     },
     billing: {
@@ -26,7 +26,7 @@ class AppStore {
       next: "payment"
     },
     payment: {
-      active: false,
+      active: true,
       next: "success"
     },
   }

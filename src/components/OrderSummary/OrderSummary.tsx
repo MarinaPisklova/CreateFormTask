@@ -1,17 +1,22 @@
 import React from "react";
 import styled from 'styled-components';
-import OrderItemsStore from "../../store/OrderItemsStore";
+import OrderItemsStore from "../../core/store/OrderItemsStore";
 import OrderList from "./OrderList/OrderList";
 import OrderPrice from "./OrderPrice/OrderPrice";
 import { observer } from 'mobx-react-lite';
+import appStore from "../../core/store/appStore";
 
-const OrderBox = styled.div`
+
+
+
+const OrderBox = styled.div<{ active: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 300px;
   padding: 24px 10px 15px 6px;
   background-color:rgba(230, 233, 240, 0.5);
+  opacity: ${props => props.active && "0.5"};
 `
 const OrderHeader = styled.div`
   display: flex;
@@ -24,15 +29,17 @@ const OrderTitle = styled.p`
   color: #5A1094;
 `
 
-const EditLink = styled.a`
+
+const EditLink = styled.a<{ disabled: boolean }>`
   font-size: 12px;
   line-height: 14px;
   color: #979797;
   text-decoration: underline;
+  cursor: ${props => props.disabled && "default !important"};
 
   &:hover,
   &:active{
-    color: #5f5f5f;
+    color: ${props => !props.disabled && "#5f5f5f"};
   }
 
   & span{
@@ -62,11 +69,11 @@ const OrderSummary = observer(() => {
   let editMode = OrderItemsStore.editMode;
 
   return (
-    <OrderBox>
+    <OrderBox active={appStore.state.success.active}>
       <div>
         <OrderHeader>
           <OrderTitle>Order Summary</OrderTitle>
-          <EditLink href="#" onClick={() => OrderItemsStore.toggleEditMode()}>
+          <EditLink disabled={appStore.state.success.active} href="#" onClick={() => { !appStore.state.success.active && OrderItemsStore.toggleEditMode() }}>
             {
               editMode
                 ?

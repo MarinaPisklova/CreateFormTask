@@ -79,11 +79,11 @@ module.exports = {
     plugins: [
         new HTMLWebpackPlugin({
             template: path.resolve(__dirname, 'index.html'),
-            favicon: path.resolve(__dirname, 'src/static/favicon.png')
+            favicon: path.resolve(__dirname, 'src/assets/favicon.png')
         }),
         new CopyPlugin({
             patterns: [
-                { from: "public/images", to: path.resolve(__dirname, 'dist/images') },
+                { from: "src/assets/images", to: path.resolve(__dirname, 'dist/images') },
             ],
         }),
     ],

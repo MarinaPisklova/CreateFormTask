@@ -3,9 +3,9 @@ import React, { FC } from "react";
 import styled from 'styled-components';
 import Select, { SingleValue } from 'react-select'
 import Input from "../Input/Input";
-import formStore, { IForms } from "../../store/formStore";
-import appStore from "../../store/appStore";
-import OrderItemsStore from "../../store/OrderItemsStore";
+import formStore, { IForms } from "../../core/store/formStore";
+import appStore from "../../core/store/appStore";
+import OrderItemsStore from "../../core/store/OrderItemsStore";
 
 
 const PaymentForm: FC = observer(() => {
@@ -14,15 +14,11 @@ const PaymentForm: FC = observer(() => {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // formStore.submitFields(props.formName);
-    // if (formStore.isValidForm) {
-    //   appStore.submit(props.formName);
-    // }
+    formStore.submitPaymentFields();
+    if (formStore.isValidForm) {
+      appStore.submit("payment");
+    }
   }
-
-  function handleChange(newValue: SingleValue<MyOption>) {
-    formStore.onCardInfoFieldChange("payment", "country", newValue?.value);
-  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -87,57 +83,10 @@ type MyOption = { label: string, value: string };
 const InputBox = styled.div`
   margin-bottom: 20px;
 `
-
-const DeliveryBox = styled.div`
-  display: flex;
-  align-items: center;
-`
-const Note = styled.div`
-  margin-left: 10px;
-  font-size: 13px;
-  line-height: 12px;
-  color: #777879;
-`
-
-const StyledSelect = styled(MySelect)`
-  & .Select__control {
-    width: 180px;
-    padding: 2px 0;
-		background: #FFFFFF;
-    border: 1px solid #DEDCDC;
-    border-radius: 5px;
-	}
-
-  & .Select__indicator-separator{
-    display: none;
-  }
-
-  & .Select__value-container, .Select__indicator{
-    padding-left: 14px;
-  }
-
-  & .Select__control--menu-is-open .Select__indicator{
-    display: none;
-  }
-
-  & .Select__menu{
-    border: 1px solid #DEDCDC;
-    box-shadow: 0px -3px 7px rgba(0, 0, 0, 0.05);
-    border-radius: 5px;
-  }
-`
-
 const FlexBox = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-`
-
-const Legend = styled.legend`
-  margin-bottom: 6px;
-  font-size: 16px;
-  line-height: 18px;
-  color: #5A1094;
 `
 
 const Label = styled.label`

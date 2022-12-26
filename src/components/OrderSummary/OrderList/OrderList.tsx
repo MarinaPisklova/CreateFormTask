@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import OrderItem from './../OrderItem/OrderItem';
 import { observer } from 'mobx-react-lite';
-import OrderItemsStore from "../../../store/OrderItemsStore";
+import OrderItemsStore from "../../../core/store/OrderItemsStore";
 
 const List = styled.ul`
   list-style: none;

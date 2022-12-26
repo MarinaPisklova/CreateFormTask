@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import styled from "styled-components";
-import OrderItemsStore from "../../../store/OrderItemsStore";
+import OrderItemsStore from "../../../core/store/OrderItemsStore";
 import { Line } from "../OrderItem";
 
 const OrderPrice = observer(() => {

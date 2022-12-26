@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { observer } from 'mobx-react-lite';
-import OrderItemsStore from "../../../store/OrderItemsStore";
+import OrderItemsStore from "../../../core/store/OrderItemsStore";
 import Dustbin from "../../UI/Icons/Dustbin/Dustbin";
 
 interface IOrderItem {

@@ -1,6 +1,6 @@
-import React from "react"
+import React, { FC } from "react"
 
-const Dustbin = () => {
+const Dustbin: FC = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="15px" height="15px" viewBox="0 0 729.837 729.838" xmlSpace="preserve">
       <g>

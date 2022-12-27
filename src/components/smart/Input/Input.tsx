@@ -1,16 +1,17 @@
 import { observer } from "mobx-react-lite";
 import React, { ChangeEvent } from "react";
-import { IInput } from "../../core/store/formStore";
-import { InputBox, StyledInput, StyledErrorBox, StyledError } from "./styles";
+import { IInput } from "../../../core/store/formStore";
+import { InputBox, StyledInput, StyledErrorBox, StyledError, Label } from "./styles";
 
-interface IInputProps {
+export interface IInputProps {
   formName: string;
   field: IInput | undefined,
   onChange: (formName: string, name: string, value: string) => void,
+  className?: string,
 }
 
 const Input = observer((props: IInputProps) => {
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     props.onChange(props.formName, e.target.name, e.target.value)
   }
 
@@ -19,13 +20,17 @@ const Input = observer((props: IInputProps) => {
 
   return (
     <InputBox>
+      {props.field.label &&
+        <Label>{props.field.label}</Label>
+      }
       <StyledInput
-        type={props.field.type}
+        type="text"
         name={props.field.name}
         value={props.field.value}
         onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
         placeholder={props.field.placeholder}
         errorColor={props.field.error ? "#f8e71c11" : "transperent"}
+        className={props.className}
       />
       {props.field.error &&
         <StyledErrorBox>

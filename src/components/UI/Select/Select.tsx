@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import Select from 'react-select';
 
 export type IOption = { label: string, value: string };

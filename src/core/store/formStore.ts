@@ -2,9 +2,9 @@ import { makeAutoObservable } from 'mobx';
 import Validator from 'validatorjs';
 
 export interface IInput {
+  label: string;
   name: string;
   placeholder: string;
-  type: string;
   value: string | undefined;
   error: string | boolean;
   rule: string | string[];
@@ -30,7 +30,7 @@ interface IRecipientFields {
   email?: IInput | undefined;
 }
 
-interface IRecipient {
+export interface IRecipient {
   title: string;
   fields: IRecipientFields
 };
@@ -54,13 +54,12 @@ interface ICardField {
   name: string,
   label: string,
   placeholder: string,
-  type: string,
   value: string | undefined,
   error: string | boolean;
   rule: string | string[];
 }
 
-interface IAddress {
+export interface IAddress {
   title: string;
   fields: IAddressFields;
 }
@@ -98,17 +97,17 @@ class FormStore {
         title: "Recipient",
         fields: {
           fullName: {
+            label: "",
             name: "fullName",
             placeholder: "Full Name",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|string'
           },
           phone: {
+            label: "",
             name: "phone",
             placeholder: "Daytime Phone",
-            type: "tel",
             value: '',
             error: '',
             rule: ['required', `regex:${phoneRegex}`]
@@ -119,33 +118,33 @@ class FormStore {
         title: "Address",
         fields: {
           streetAddress: {
+            label: "",
             name: "streetAddress",
             placeholder: "Street Address",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|string'
           },
           apartaments: {
+            label: "",
             name: "apartaments",
             placeholder: "Apt, Suite, Bldg, Gate Code. (optional)",
-            type: "text",
             value: '',
             error: '',
             rule: 'string'
           },
           city: {
+            label: "",
             name: "city",
             placeholder: "City",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|string'
           },
           zip: {
+            label: "",
             name: "zip",
             placeholder: "ZIP",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|string'
@@ -175,17 +174,17 @@ class FormStore {
         title: "Billing Contact",
         fields: {
           fullName: {
+            label: "",
             name: "fullName",
             placeholder: "Full Name",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|string'
           },
           email: {
+            label: "",
             name: "email",
             placeholder: "Email Address",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|email'
@@ -196,33 +195,33 @@ class FormStore {
         title: "Billing Address",
         fields: {
           streetAddress: {
+            label: "",
             name: "streetAddress",
             placeholder: "Street Address",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|string'
           },
           apartaments: {
+            label: "",
             name: "apartaments",
             placeholder: "Apt, Suite, Bldg, Gate Code. (optional)",
-            type: "text",
             value: '',
             error: '',
             rule: 'string'
           },
           city: {
+            label: "",
             name: "city",
             placeholder: "City",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|string'
           },
           zip: {
+            label: "",
             name: "zip",
             placeholder: "ZIP",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|string'
@@ -255,7 +254,6 @@ class FormStore {
             name: "cardholderName",
             label: "Cardholder Name",
             placeholder: "Name as it appears on your card",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|string'
@@ -265,7 +263,6 @@ class FormStore {
             name: "cardNumber",
             label: "Card Number",
             placeholder: "XXXX XXXX XXXX XXXX XXXX",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|numeric'
@@ -274,7 +271,6 @@ class FormStore {
             name: "expireDate",
             label: "Expire Date",
             placeholder: "MM / YY",
-            type: "text",
             value: '',
             error: '',
             rule: 'required|string'
@@ -283,7 +279,6 @@ class FormStore {
             name: "securityCode",
             label: "Security Code",
             placeholder: "",
-            type: "text",
             value: '',
             error: '',
             rule: [`required`,`regex:${codeRegex}`]

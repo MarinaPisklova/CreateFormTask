@@ -1,16 +1,6 @@
 import styled from "styled-components"
 import FormSelect from "../../UI/Select/Select"
 
-export const DeliveryBox = styled.div`
-  display: flex;
-  align-items: center;
-`
-export const Note = styled.div`
-  margin-left: 10px;
-  font-size: 13px;
-  line-height: 12px;
-  color: #777879;
-`
 export const StyledSelect = styled(FormSelect)`
   & .Select__control {
     width: 180px;
@@ -58,15 +48,4 @@ export const StyledFieldset = styled.fieldset`
   gap: 10px;
   margin-bottom: 20px;
   border: none;
-`
-
-export const StyledButton = styled.button`
-  padding: 12px 56px 14px 57px;
-  background-color: rgba(90, 16, 148, 0.8);
-  border: 1px solid rgba(67, 28, 93, 0.8);
-  border-radius: 5px;
-  font-size: 16px;
-  line-height: 19px;
-  text-align: center;
-  color: #FFFFFF;
 `

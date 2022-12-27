@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 
-interface IOrderItem {
+export interface IOrderItem {
   id: number,
   name: string,
   material: string,

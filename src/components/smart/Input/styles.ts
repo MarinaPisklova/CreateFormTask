@@ -16,8 +16,16 @@ export const StyledInput = styled.input<IStyledInput>`
   background-color: ${props => props.errorColor};
 `
 
+export const Label = styled.label`
+  margin-bottom: 6px;
+  font-size: 16px;
+  line-height: 18px;
+  color: #5A1094;
+`
+
 export const InputBox = styled.div`
   width: 100%;
+
   position: relative;
 `
 export const StyledErrorBox = styled.div`

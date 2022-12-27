@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import FormBox from '../../components/smart/FormBox/FormBox';
-import OrderSummary from '../../components/OrderSummary/OrderSummary';
+import OrderSummary from '../../components/smart/OrderSummary/OrderSummary';
 import { ContentBox } from './styles';
 
 const FormPage: FC = () => {

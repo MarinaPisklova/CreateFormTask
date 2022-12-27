@@ -48,19 +48,6 @@ class AppStore {
     let nextName = this.state[name as keyof IState].next;
     this.state[nextName as keyof IState].active = true;
   }
-
-  handleClick(name:string){
-    this.setAllFalse();
-    this.state[name as keyof IState].active = true;
-  }
-
-  setAllFalse(){
-    this.state.shipping.active = false;
-    this.state.billing.active = false;
-    this.state.payment.active = false;
-    this.state.success.active = false;
-  }
-
 }
 
 export default new AppStore();

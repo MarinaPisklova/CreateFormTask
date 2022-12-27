@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import PaymentForm from "../../PaymentForm/PaymentForm";
+import PaymentForm from "../../smart/PaymentForm/PaymentForm";
 import { StyledSecureMessage, StyledTitle } from "./styles";
 
 const PaymentFormBox: FC = () => {

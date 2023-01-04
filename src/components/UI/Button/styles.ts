@@ -10,8 +10,14 @@ export const StyledButton = styled.button`
   text-align: center;
   color: #FFFFFF;
 
-  &:hover,
-  &:focus{
-    background: rgba(161, 92, 214, 0.8);;
+  &:hover{
+    background: rgba(161, 92, 214, 0.8);
+  }
+  &:disabled{
+    opacity: 0.2;
+  }
+  &:hover:disabled{
+    background-color: rgba(90, 16, 148, 0.8);
+    cursor: default
   }
 `

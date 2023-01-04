@@ -1,6 +1,8 @@
 import { makeAutoObservable } from 'mobx';
 import Validator from 'validatorjs';
 
+
+
 export interface IInput {
   label: string;
   name: string;
@@ -87,8 +89,52 @@ export interface IForms {
 
 let phoneRegex: RegExp = /^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
 
-let codeRegex: RegExp = /\d{3}/;
-let dateRegex: RegExp = /\d{3}/;
+Validator.register('cardNumbers', function (value, requirement, attribute) {
+  value = String(value).replace(/ /g, '');
+  return value.length == 20;
+}, 'The card number must be 20 characters.');
+
+Validator.register('cardNumbersNumeric', function (value, requirement, attribute) {
+  value = String(value).replace(/ /g, '');
+  return !isNaN(Number(value));
+}, 'The card number must be numeric.');
+
+Validator.register('securityCode', function (value, requirement, attribute) {
+  return !isNaN(Number(value)) && String(value).length == 3;
+}, 'The security code must be numeric and 3 characters.');
+
+Validator.register('expireDateSize', function (value, requirement, attribute) {
+  value = String(value);
+  value = value.replace(/[\s\/]/g, '');
+  return value.length == 4;
+}, 'The expire date must be 4 characters');
+
+Validator.register('expireDateExpired', function (value, requirement, attribute) {
+  value = String(value);
+  value = value.replace(/[\s\/]/g, '');
+
+  let isCorrectDate = false;
+  if (value.length == 4) {
+    let today = new Date();
+    let month = Number(value[0] + value[1]);
+    let year = Number("20" + value[2] + value[3]);
+    if (Number(month) < 13) {
+      var expDate = new Date(year, (month - 1));
+      if (today.getTime() < expDate.getTime()) {
+        isCorrectDate = true;
+      }
+    }
+  }
+
+  return isCorrectDate;
+}, 'Your Card is expired.');
+
+Validator.register('expireDateNumeric', function (value, requirement, attribute) {
+  value = String(value);
+  value = value.replace(/[\s\/]/g, '');
+  return !isNaN(Number(value));
+}, 'The expire date must be numeric');
+
 
 class FormStore {
   public form: IForms = {
@@ -153,7 +199,6 @@ class FormStore {
             name: "country",
             placeholder: "Country",
             country: [
-              { value: 'Russia', label: 'Russia' },
               { value: 'Россия', label: 'Россия' },
               { value: 'США', label: 'США' },
               { value: 'Великобритания', label: 'Великобритания' },
@@ -265,7 +310,7 @@ class FormStore {
             placeholder: "XXXX XXXX XXXX XXXX XXXX",
             value: '',
             error: '',
-            rule: 'required|numeric'
+            rule: 'required|cardNumbers|cardNumbersNumeric'
           },
           expireDate: {
             name: "expireDate",
@@ -273,7 +318,7 @@ class FormStore {
             placeholder: "MM / YY",
             value: '',
             error: '',
-            rule: 'required|string'
+            rule: 'required|expireDateSize|expireDateNumeric|expireDateExpired'
           },
           securityCode: {
             name: "securityCode",
@@ -281,7 +326,7 @@ class FormStore {
             placeholder: "",
             value: '',
             error: '',
-            rule: [`required`,`regex:${codeRegex}`]
+            rule: 'required|securityCode'
           },
         },
       },
@@ -325,10 +370,17 @@ class FormStore {
       let field: ICardField | undefined = cardInfo.fields[propName as keyof ICardFields];
 
       if (field != undefined) {
-        
-        field.value = value;
+        if (propName == "cardNumber") {
+          field.value = cardNumberMusk(value);
+        }
+        else if (propName == "expireDate") {
+          field.value = expireDateMusk(value);
+        }
+        else {
+          field.value = value;
+        }
 
-        var validation = new Validator(
+        let validation = new Validator(
           { [propName]: field.value },
           { [propName]: field.rule },
           { required: `Please enter ${field.name}` }
@@ -414,7 +466,6 @@ class FormStore {
   };
 
   copyShippingData() {
-    console.log(this.form)
     let shipRecFields = this.form.shipping.recipient?.fields;
     let billRecFields = this.form.billing.recipient?.fields;
 
@@ -444,6 +495,42 @@ class FormStore {
       }
     }
   }
+}
+
+const cardNumberMusk = (value: string | undefined): string | undefined => {
+  if (value) {
+    let muskValue = [];
+    let muskValueStr = "";
+    value = value.replace(/ /g, '')
+    for (let i = 0; i < value.length; i++) {
+      const element = value[i];
+      if (i % 4 == 0 && i != 0) {
+        muskValue.push(" ");
+      }
+      muskValue.push(element);
+      muskValueStr = muskValue.join("");
+    }
+    return muskValueStr;
+  }
+  return value;
+}
+
+const expireDateMusk = (value: string | undefined): string | undefined => {
+  if (value) {
+    let muskValue = [];
+    let muskValueStr = "";
+    value = value.replace(/[\s\/]/g, '');
+    for (let i = 0; i < value.length; i++) {
+      const element = value[i];
+      if (i % 2 == 0 && i != 0) {
+        muskValue.push("/");
+      }
+      muskValue.push(element);
+      muskValueStr = muskValue.join("");
+    }
+    return muskValueStr;
+  }
+  return value;
 }
 
 export default new FormStore();

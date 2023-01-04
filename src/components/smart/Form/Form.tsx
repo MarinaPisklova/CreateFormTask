@@ -14,9 +14,11 @@ interface IFormProps {
 }
 
 const Form: FC<IFormProps> = observer((props) => {
+  
   const recipient = formStore.form[props.formName as keyof IForms].recipient;
   const address = formStore.form[props.formName as keyof IForms].address;
   const editMode = OrderItemsStore.editMode;
+  console.log(!formStore.form.shipping.meta.isValid || editMode)
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,7 +50,7 @@ const Form: FC<IFormProps> = observer((props) => {
           />
           <Button
             type="submit"
-            disabled={!formStore.form.shipping.meta.isValid || editMode}
+            disabled={editMode}
           >
             Continue
           </Button>

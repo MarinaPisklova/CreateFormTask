@@ -38,10 +38,12 @@ const AddressFieldSet: FC<IAddressSet> = (props: IAddressSet) => {
       <FlexBox>
         <StyledSelect
           classNamePrefix={'Select'}
+          field={address.fields.country}
           options={address.fields.country.country}
-          placeholder={address.fields.country.placeholder}
+          placeholder={!address.fields.country.value && address.fields.country.placeholder}
           onChange={props.onSelectChange}
-          value={{ value: address.fields.country.value, label: address.fields.country.value }}
+          value={!!address.fields.country.value && { value: address.fields.country.value, label: address.fields.country.value}}
+          errorColor={address.fields.country.error ? "#f8e71c11" : "transperent"}
         />
 
         <Input

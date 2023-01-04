@@ -5,7 +5,7 @@ export const StyledSelect = styled(FormSelect)`
   & .Select__control {
     width: 180px;
     padding: 2px 0;
-    background: #FFFFFF;
+    background-color: ${props => props.errorColor};
     border: 1px solid #DEDCDC;
     border-radius: 5px;
   }

@@ -10,7 +10,7 @@ const SuccessFormBox:FC<{ email: string | undefined }> = (props: { email: string
         shortly to <StyledEmailSpan>{props.email}</StyledEmailSpan>
       </SuccessMessage>
       <SuccessMessage>Estimated delivery Day is <br/> <StyledDateSpan>Friday 1st April 2023</StyledDateSpan></SuccessMessage>
-      <StyledRecipeSpan>Print Recipe</StyledRecipeSpan>
+      {/* <StyledRecipeSpan>Print Recipe</StyledRecipeSpan> */}
     </SuccessContainer>
   )
 }

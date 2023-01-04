@@ -47,7 +47,7 @@ const PaymentForm: FC = observer(() => {
       </StyledFieldset>
       <Button
         type="submit"
-        disabled={!formStore.form.shipping.meta.isValid || editMode}
+        disabled={editMode}
       >
         Pay Securely
       </Button>

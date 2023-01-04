@@ -15,6 +15,9 @@
 * styled-components
 * Webpack сборка на клиенте
 
+## Сайт приложения
+https://cartform.webtm.ru/form
+
 ## Запуск приложения
 npm install
 
